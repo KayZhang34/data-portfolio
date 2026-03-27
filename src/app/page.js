@@ -4,6 +4,8 @@ import ProjectCard from "./components/project-card";
 import { getAllItems } from "@/lib/notion-queries";
 import ImageCarousel from "./components/image-carousel";
 
+export const revalidate = 300;
+
 export default async function Home() {
   const items = await getAllItems();
   const carouselImages = [
