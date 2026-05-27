@@ -7,7 +7,7 @@ export default function Navbar() {
 
   const links = [
     { href: "/", label: "Home", external: false },
-    { href: "/about", label: "About", external: false },
+    { href: "/projects", label: "Projects", external: false },
     {
       href: "https://www.linkedin.com/in/kayzhang34/",
       label: "LinkedIn",

@@ -17,7 +17,7 @@ export default function CopyEmailButton({ email }) {
   return (
     <button
       onClick={handleCopy}
-      className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors"
+      className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 hover:bg-gray-50 transition-colors"
     >
       {copied ? (
         <>

@@ -1,26 +1,52 @@
-// app/projects/[slug]/page.tsx
+// app/projects/[slug]/page.js
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getItemBySlug, getBlocks } from "@/lib/notion-queries";
+import Navbar from "@/app/components/navbar";
 
 export const revalidate = 300;
+
+/** Renders a Notion rich_text array with inline formatting preserved. */
+function RichText({ richText = [] }) {
+  return (
+    <>
+      {richText.map((t, i) => {
+        const { bold, italic, underline, strikethrough, code } = t.annotations ?? {};
+        let node = t.plain_text;
+
+        if (code)          node = <code key={i} className="px-1 py-0.5 bg-gray-100 rounded text-sm font-mono">{node}</code>;
+        if (bold)          node = <strong key={i} className="font-semibold">{node}</strong>;
+        if (italic)        node = <em key={i}>{node}</em>;
+        if (underline)     node = <u key={i}>{node}</u>;
+        if (strikethrough) node = <s key={i}>{node}</s>;
+
+        if (t.href) {
+          return (
+            <a key={i} href={t.href} target="_blank" rel="noreferrer"
+               className="underline underline-offset-2 hover:text-gray-600 transition-colors">
+              {node}
+            </a>
+          );
+        }
+
+        return <span key={i}>{node}</span>;
+      })}
+    </>
+  );
+}
 
 export default async function ProjectPage({ params }) {
   const page = await getItemBySlug(params.slug);
   if (!page) return notFound();
-  console.log(page);
   const p = page.properties;
   const name = p.title?.title?.[0]?.plain_text ?? "Untitled";
-  const subheader = p.subheader?.rich_text?.[0]?.plain_text ?? "";
   const projectLink = p.projectLink?.url ?? null;
-
-  const desc = p.descriptions?.rich_text?.[0]?.plain_text ?? "";
-  const context = p.context?.rich_text?.[0]?.plain_text ?? "";
+  const descRt = p.descriptions?.rich_text ?? [];
 
   const year = p.year?.rich_text?.[0]?.plain_text ?? "";
   const tech = (p.technologies?.multi_select ?? []).map((t) => t.name);
-  const roles = (p.roles?.multi_select ?? []).map((t) => t.name);
+  const roles = (p.roles?.multi_select ?? []).map((r) => r.name);
 
   const images = (p.image?.files ?? [])
     .map((f) => (f.type === "file" ? f.file.url : f.external?.url))
@@ -30,84 +56,70 @@ export default async function ProjectPage({ params }) {
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
-      {/* Navigation */}
-      <nav className="fixed top-8 left-1/2 -translate-x-1/2 z-50">
-        <div className="bg-white/80 backdrop-blur-md rounded-full px-6 py-3 shadow-sm border border-gray-200">
-          <ul className="flex items-center gap-8 text-sm">
-            <li>
-              <Link
-                href="/"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/about"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                About
-              </Link>
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
-              <Link href="/" className="font-medium text-gray-900">
-                Work
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/contact"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                Contact
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-8 pt-32 pb-20">
+      <main className="max-w-5xl mx-auto px-8 pt-32 pb-20">
         {/* Hero Section with Sidebar */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
           {/* Left Column - Project Info */}
           <div className="lg:col-span-1">
-            <h1 className="text-5xl font-normal text-gray-900 mb-2">{name}</h1>
-            <p className="text-gray-500 mb-12">{subheader}</p>
+            <h1 className="text-5xl font-normal text-gray-900 mb-8">{name}</h1>
 
             {roles.length > 0 && (
               <div className="mb-8">
                 <h3 className="text-xs uppercase tracking-wider text-gray-400 mb-3">
-                  MY ROLE{" "}
+                  MY ROLE
                 </h3>
                 <div className="space-y-1 text-sm">
                   {roles.map((t) => (
-                    <p key={t} className="text-gray-900">
-                      {t}
-                    </p>
+                    <p key={t} className="text-gray-900">{t}</p>
                   ))}
                 </div>
               </div>
             )}
-            {/* Tools */}
+
+            {projectLink && (
+              <a
+                href={projectLink}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+              >
+                View Live Project
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </a>
+            )}
+          </div>
+
+          {/* Right Column - Description, Tools, Timeline */}
+          <div className="lg:col-span-2">
+            {descRt.length > 0 && (
+              <div className="mb-8">
+                <h3 className="text-xs uppercase tracking-wider text-gray-400 mb-3">
+                  DESCRIPTION
+                </h3>
+                <p className="text-gray-900 leading-relaxed"><RichText richText={descRt} /></p>
+              </div>
+            )}
+
             {tech.length > 0 && (
               <div className="mb-8">
                 <h3 className="text-xs uppercase tracking-wider text-gray-400 mb-3">
                   TOOLS
                 </h3>
-                <div className="space-y-1 text-sm">
+                <div className="flex flex-wrap gap-2">
                   {tech.map((t) => (
-                    <p key={t} className="text-gray-900">
+                    <span key={t} className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full border border-gray-200">
                       {t}
-                    </p>
+                    </span>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Timeline */}
             {year && (
               <div className="mb-8">
                 <h3 className="text-xs uppercase tracking-wider text-gray-400 mb-3">
@@ -117,58 +129,20 @@ export default async function ProjectPage({ params }) {
               </div>
             )}
           </div>
-
-          {/* Right Column - Description */}
-          <div className="lg:col-span-2">
-            {/* Description */}
-            <div className="mb-8">
-              <h3 className="text-xs uppercase tracking-wider text-gray-400 mb-3">
-                DESCRIPTION
-              </h3>
-              <p className="text-gray-900 leading-relaxed mb-8">{desc}</p>
-            </div>
-
-            {/* Context */}
-            <div className="mb-8">
-              <h3 className="text-xs uppercase tracking-wider text-gray-400 mb-3">
-                CONTEXT
-              </h3>
-              <p className="text-gray-900 leading-relaxed mb-8">{context}</p>
-            </div>
-
-            {/* Case Study Link */}
-            {projectLink && (
-              <a
-                href={projectLink}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
-              >
-                View Live Project
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </a>
-            )}
-          </div>
         </div>
+
+        {/* Body Content from Notion */}
+        {blocks.length > 0 && (
+          <div className="max-w-3xl mb-16 space-y-4">
+            <NotionBlocks blocks={blocks} />
+          </div>
+        )}
 
         {/* Bento Grid - Images */}
         {images.length > 0 && (
           <section className="relative">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-auto">
               {images.map((src, idx) => {
-                // Create varied layout like Marco's bento grid
                 const isLarge = idx === 0 || idx === 4;
                 const isTall = idx === 1 || idx === 5;
 
@@ -176,7 +150,7 @@ export default async function ProjectPage({ params }) {
                   <div
                     key={src}
                     className={`
-                      bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 
+                      bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200
                       ${isLarge ? "md:col-span-2 md:row-span-2" : ""}
                       ${isTall ? "md:row-span-2" : ""}
                       relative group cursor-pointer
@@ -208,37 +182,44 @@ function NotionBlocks({ blocks }) {
   return (
     <>
       {blocks.map((b) => {
-        if (b.type === "descriptions") {
-          const text = b.descriptions?.rich_text
-            .map((t) => t.plain_text)
-            .join("");
-          if (!text.trim()) return <div key={b.id} className="h-2" />;
+        if (b.type === "paragraph") {
+          const rt = b.paragraph?.rich_text ?? [];
+          if (!rt.length) return <div key={b.id} className="h-2" />;
           return (
             <p key={b.id} className="text-gray-900 leading-relaxed">
-              {text}
+              <RichText richText={rt} />
             </p>
           );
         }
 
         if (b.type === "heading_2") {
-          const text = b.heading_2.rich_text.map((t) => t.plain_text).join("");
           return (
-            <h2
-              key={b.id}
-              className="text-xl font-medium text-gray-900 mt-6 mb-2"
-            >
-              {text}
+            <h2 key={b.id} className="text-xl font-medium text-gray-900 mt-6 mb-2">
+              <RichText richText={b.heading_2?.rich_text ?? []} />
             </h2>
           );
         }
 
+        if (b.type === "heading_3") {
+          return (
+            <h3 key={b.id} className="text-lg font-medium text-gray-900 mt-4 mb-1">
+              <RichText richText={b.heading_3?.rich_text ?? []} />
+            </h3>
+          );
+        }
+
         if (b.type === "bulleted_list_item") {
-          const text = b.bulleted_list_item.rich_text
-            .map((t) => t.plain_text)
-            .join("");
           return (
             <li key={b.id} className="text-gray-900 ml-6 mb-1 list-disc">
-              {text}
+              <RichText richText={b.bulleted_list_item?.rich_text ?? []} />
+            </li>
+          );
+        }
+
+        if (b.type === "numbered_list_item") {
+          return (
+            <li key={b.id} className="text-gray-900 ml-6 mb-1 list-decimal">
+              <RichText richText={b.numbered_list_item?.rich_text ?? []} />
             </li>
           );
         }
