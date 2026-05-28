@@ -4,10 +4,35 @@ import { notion, dbId } from "./notion";
 const fileUrl = (f) =>
   (f?.type === "file" ? f.file?.url : f?.external?.url) || null;
 
+export async function getFeaturedItems() {
+  const res = await notion.databases.query({
+    database_id: dbId,
+    filter: { property: "featured", checkbox: { equals: true } },
+    sorts: [{ property: "order", direction: "ascending" }],
+    page_size: 3,
+  });
+
+  return res.results.map((page) => {
+    const p = page.properties;
+    const files = p.image?.files ?? [];
+    const firstImage = files.length ? fileUrl(files[0]) : null;
+
+    return {
+      id: page.id,
+      name: p.title?.title?.[0]?.plain_text ?? "Untitled",
+      slug: p.slug?.rich_text?.[0]?.plain_text ?? page.id,
+      description: p.description?.rich_text?.[0]?.plain_text ?? "",
+      year: p.year?.rich_text?.[0]?.plain_text ?? "",
+      technologies: (p.technologies?.multi_select ?? []).map((t) => t.name),
+      thumb: firstImage,
+    };
+  });
+}
+
 export async function getAllItems() {
   const res = await notion.databases.query({
     database_id: dbId,
-    sorts: [{ timestamp: "last_edited_time", direction: "descending" }],
+    sorts: [{ property: "order", direction: "ascending" }],
     page_size: 100,
   });
 
@@ -20,7 +45,7 @@ export async function getAllItems() {
       id: page.id,
       name: p.title?.title?.[0]?.plain_text ?? "Untitled",
       slug: p.slug?.rich_text?.[0]?.plain_text ?? page.id,
-      description: p.descriptions?.rich_text?.[0]?.plain_text ?? "",
+      description: p.description?.rich_text?.[0]?.plain_text ?? "",
       year: p.year?.rich_text?.[0]?.plain_text ?? "",
       technologies: (p.technologies?.multi_select ?? []).map((t) => t.name),
       thumb: firstImage,

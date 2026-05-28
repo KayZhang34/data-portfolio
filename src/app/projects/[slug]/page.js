@@ -42,7 +42,7 @@ export default async function ProjectPage({ params }) {
   const p = page.properties;
   const name = p.title?.title?.[0]?.plain_text ?? "Untitled";
   const projectLink = p.projectLink?.url ?? null;
-  const descRt = p.descriptions?.rich_text ?? [];
+  const descRt = p.description?.rich_text ?? [];
 
   const year = p.year?.rich_text?.[0]?.plain_text ?? "";
   const tech = (p.technologies?.multi_select ?? []).map((t) => t.name);
