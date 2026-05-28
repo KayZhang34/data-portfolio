@@ -3,28 +3,28 @@ import { getFeaturedItems } from "@/lib/notion-queries";
 import ImageCarousel from "./components/image-carousel";
 import CopyEmailButton from "./components/copy-email-button";
 
-export const revalidate = 300;
+export const revalidate = 60;
 
 export default async function Home() {
   const items = await getFeaturedItems();
   const carouselImages = [
-    "/kay5.jpg",
     "/kay3.jpg",
+    "/kay5.jpg",
     "/kay.jpg",
   ];
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
-      <main className="max-w-7xl mx-auto px-8 pt-32 pb-20">
+      <main className="max-w-7xl mx-auto px-4 sm:px-8 pt-28 sm:pt-32 pb-20">
         {/* Hero Section - Split Layout */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           {/* Bio Card */}
-          <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-200">
-            <h1 className="text-5xl font-light text-gray-900 mb-6">
+          <div className="bg-white rounded-3xl p-6 sm:p-12 shadow-sm border border-gray-200">
+            <h1 className="text-4xl sm:text-5xl font-light text-gray-900 mb-6">
               Hi, I'm Kay :).
             </h1>
 
-            <div className="flex gap-3 mb-8">
+            <div className="flex flex-wrap gap-2 sm:gap-3 mb-8">
               <a
                 href="https://www.linkedin.com/in/kayzhang34/"
                 target="_blank"
@@ -47,7 +47,7 @@ export default async function Home() {
                 </svg>
                 GitHub
               </a>
-              <CopyEmailButton email="kz763@nyu.edu" />
+              <CopyEmailButton email="kay.zhang34@gmail.com" />
             </div>
 
             <div className="space-y-4 text-gray-600 leading-relaxed">

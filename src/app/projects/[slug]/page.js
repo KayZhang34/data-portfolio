@@ -59,9 +59,9 @@ export default async function ProjectPage({ params }) {
       <Navbar />
 
       {/* Main Content */}
-      <main className="max-w-5xl mx-auto px-8 pt-32 pb-20">
+      <main className="max-w-5xl mx-auto px-4 sm:px-8 pt-28 sm:pt-32 pb-20">
         {/* Hero Section with Sidebar */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 mb-16">
           {/* Left Column - Project Info */}
           <div className="lg:col-span-1">
             <h1 className="text-5xl font-normal text-gray-900 mb-8">{name}</h1>
@@ -110,9 +110,9 @@ export default async function ProjectPage({ params }) {
                 <h3 className="text-xs uppercase tracking-wider text-gray-400 mb-3">
                   TOOLS
                 </h3>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 min-w-0 w-full">
                   {tech.map((t) => (
-                    <span key={t} className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full border border-gray-200">
+                    <span key={t} className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full border border-gray-200 break-words">
                       {t}
                     </span>
                   ))}

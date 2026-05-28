@@ -21,27 +21,36 @@ export default function AboutPage() {
       <main className="max-w-6xl mx-auto px-8 pt-32 pb-20">
         {/* Hero Section */}
         <section className="mb-20">
-          <h1 className="text-5xl font-light mb-8 leading-tight">
-            <span className="text-gray-900 font-normal">Kay</span>{" "}
-            <span className="text-gray-400">works with</span>{" "}
-            <span className="text-gray-900 font-normal">data</span>
-            <span className="text-gray-400">.</span>{" "}
-          </h1>
-
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             {/* Left Column - Bio & Contact */}
             <div>
+              <h1 className="text-5xl font-light mb-8 leading-tight">
+                <span className="text-gray-900 font-normal">Kay</span>{" "}
+                <span className="text-gray-400">works with</span>{" "}
+                <span className="text-gray-900 font-normal">data</span>
+                <span className="text-gray-400">.</span>{" "}
+              </h1>
               <div className="space-y-6 text-gray-700 leading-relaxed">
                 <p>
-                  I graduated from NYU with a B.A. in Math. It was highkey challening and lowkey didn't prepare me for specific work stuff,
-                  but it did build strong foundations in problem-solving and taught me how to persist through difficult problems,
-                  skills that have been useful in my career and in life in general.
+                  I graduated from NYU with a B.A. in Math. It was highkey challenging,
+                  but that experience built strong foundations in problem-solving and taught me how to persist through difficult situations.
+                  Those skills have been useful in my career and also more generally in life.
                 </p>
                 <p>
                   I've been blessed with the opportunity to work at Curinos and Accenture,
                   and I learned a lot about work and myself in that time.
-                  I quit my job in late 2024 due to some personal reasons that are now resolved,
-                  and now I am looking for new opportunities in the data space! :)
+                  I took a planned career break in late 2024 due to career alignment,
+                  and I've been grateful for this time to reflect on my career and explore what I want to do next. 
+                </p>
+                <p>
+                  I'm currently looking for new opportunities in data analytics, business intelligence, and related fields.
+                  If you have any opportunities or just want to chat, feel free to hit me up at {" "}
+                  <a
+                    href="mailto:kay.zhang34@gmail.com"
+                    className="text-blue-500 hover:underline"
+                  >
+                    kay.zhang34@gmail.com
+                  </a>
                 </p>
               </div>
             </div>

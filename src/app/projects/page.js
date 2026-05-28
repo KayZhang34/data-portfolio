@@ -2,14 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { getAllItems } from "@/lib/notion-queries";
 
-export const revalidate = 300;
+export const revalidate = 60;
 
 export default async function ProjectsPage() {
   const items = await getAllItems();
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
-      <main className="max-w-4xl mx-auto px-8 pt-32 pb-20">
+      <main className="max-w-4xl mx-auto px-4 sm:px-8 pt-28 sm:pt-32 pb-20">
         <div className="mb-10">
           <h1 className="text-4xl font-light text-gray-900 mb-3">Projects</h1>
           <p className="text-gray-600">I am a life-long student. My overarching goal is to keep growing as a professional and a human into infinity.</p>
@@ -20,10 +20,10 @@ export default async function ProjectsPage() {
             <Link
               key={index}
               href={`/projects/${item.slug}`}
-              className="group flex gap-6 bg-white rounded-2xl p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300"
+              className="group flex flex-col sm:flex-row gap-4 sm:gap-6 bg-white rounded-2xl p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300"
             >
               {/* Thumbnail */}
-              <div className="relative flex-shrink-0 w-48 aspect-video rounded-xl overflow-hidden bg-gray-100">
+              <div className="relative w-full sm:w-48 sm:flex-shrink-0 aspect-video rounded-xl overflow-hidden bg-gray-100">
                 {item.thumb ? (
                   <Image
                     src={item.thumb}
