@@ -12,7 +12,9 @@ export default async function ProjectsPage() {
       <main className="max-w-4xl mx-auto px-4 sm:px-8 pt-28 sm:pt-32 pb-20">
         <div className="mb-10">
           <h1 className="text-4xl font-light text-gray-900 mb-3">Projects</h1>
-          <p className="text-gray-600">I am a life-long student. My overarching goal is to keep growing as a professional and a human into infinity.</p>
+          <p className="text-gray-600">I am a life-long student. The goal is to keep growing as a professional and a human into infinity.
+            The projects are 
+          </p>
         </div>
 
         <div className="space-y-4">

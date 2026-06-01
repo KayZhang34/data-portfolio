@@ -34,9 +34,6 @@ export default function ImageCarousel({ images }) {
             />
           </svg>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/50 to-transparent">
-          <div className="text-white text-base font-light">🌊 New York, NY</div>
-        </div>
       </div>
     );
   }
@@ -46,8 +43,8 @@ export default function ImageCarousel({ images }) {
       {/* Main Image */}
       <div className="relative h-full overflow-hidden">
         <Image
-          src={images[currentIndex]}
-          alt={`Slide ${currentIndex + 1}`}
+          src={images[currentIndex].src}
+          alt={images[currentIndex].caption || `Slide ${currentIndex + 1}`}
           fill
           className="object-cover transition-opacity duration-300"
           sizes="(max-width: 768px) 100vw, 50vw"
@@ -120,7 +117,7 @@ export default function ImageCarousel({ images }) {
         <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/50 to-transparent">
           <div className="flex items-center justify-between">
             <div className="text-white text-base font-light">
-              🌊 New York, NY
+              {images[currentIndex].caption}
             </div>
             <div className="flex items-center gap-2">
               {images.map((_, index) => (

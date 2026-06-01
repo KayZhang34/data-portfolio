@@ -138,38 +138,27 @@ export default async function ProjectPage({ params }) {
           </div>
         )}
 
-        {/* Bento Grid - Images */}
+        {/* Images Grid */}
         {images.length > 0 && (
-          <section className="relative">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-auto">
-              {images.map((src, idx) => {
-                const isLarge = idx === 0 || idx === 4;
-                const isTall = idx === 1 || idx === 5;
-
-                return (
-                  <div
-                    key={src}
-                    className={`
-                      bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200
-                      ${isLarge ? "md:col-span-2 md:row-span-2" : ""}
-                      ${isTall ? "md:row-span-2" : ""}
-                      relative group cursor-pointer
-                    `}
-                  >
-                    <div
-                      className={`relative w-full ${isLarge ? "h-[500px]" : isTall ? "h-[400px]" : "h-[300px]"}`}
-                    >
-                      <Image
-                        src={src}
-                        alt={`${name} - Image ${idx + 1}`}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                    </div>
-                  </div>
-                );
-              })}
+          <section>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {images.map((src, idx) => (
+                <a
+                  key={src}
+                  href={projectLink ?? undefined}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`relative w-full aspect-video rounded-xl overflow-hidden bg-gray-100 shadow-sm border border-gray-200 group block ${projectLink ? "cursor-pointer" : "cursor-default"}`}
+                >
+                  <Image
+                    src={src}
+                    alt={`${name} - Image ${idx + 1}`}
+                    fill
+                    className="object-contain group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </a>
+              ))}
             </div>
           </section>
         )}

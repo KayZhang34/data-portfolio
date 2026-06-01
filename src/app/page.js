@@ -8,9 +8,9 @@ export const revalidate = 60;
 export default async function Home() {
   const items = await getFeaturedItems();
   const carouselImages = [
-    "/kay3.jpg",
-    "/kay5.jpg",
-    "/kay.jpg",
+    { src: "/kay3.jpg", caption: "🍡 Queens, New York" },
+    { src: "/kay5.jpg", caption: "🍵 Osaka, Japan" },
+    { src: "/kay.jpg",  caption: "🏔️ Lukla, Nepal" },
   ];
 
   return (
