@@ -7,7 +7,7 @@ export default function ProjectCard({ info }) {
       href={`/projects/${info.slug}`}
       className="group flex flex-col gap-4 items-start bg-white rounded-3xl p-8 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300"
     >
-      <div className="relative w-full aspect-square flex-shrink-0 rounded-2xl overflow-hidden bg-gray-50">
+      <div className="relative w-full aspect-video flex-shrink-0 rounded-2xl overflow-hidden bg-gray-50">
         {info.thumb ? (
           <Image
             src={info.thumb}

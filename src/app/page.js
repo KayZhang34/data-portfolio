@@ -3,7 +3,7 @@ import { getFeaturedItems } from "@/lib/notion-queries";
 import ImageCarousel from "./components/image-carousel";
 import CopyEmailButton from "./components/copy-email-button";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const items = await getFeaturedItems();
