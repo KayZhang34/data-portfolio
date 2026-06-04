@@ -58,7 +58,7 @@ export default function AboutPage() {
             {/* Right Column - Image */}
             <div className="rounded-3xl overflow-hidden h-[300px] md:h-[500px] relative">
               <Image
-                src="/kay2.jpg"
+                src="/images/kay2.jpg"
                 alt="Kay Zhang"
                 fill
                 className="object-cover"

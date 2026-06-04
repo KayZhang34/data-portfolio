@@ -6,9 +6,9 @@ import CopyEmailButton from "./components/copy-email-button";
 export default function Home() {
   const items = getFeaturedItems();
   const carouselImages = [
-    { src: "/kay3.jpg", caption: "🍡 Queens, New York" },
-    { src: "/kay5.jpg", caption: "🍵 Osaka, Japan" },
-    { src: "/kay.jpg",  caption: "🏔️ Lukla, Nepal" },
+    { src: "/images/kay3.jpg", caption: "🍡 Queens, New York" },
+    { src: "/images/kay5.jpg", caption: "🍵 Osaka, Japan" },
+    { src: "/images/kay.jpg",  caption: "🏔️ Lukla, Nepal" },
   ];
 
   return (
