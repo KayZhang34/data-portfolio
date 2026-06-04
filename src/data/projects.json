@@ -1,0 +1,89 @@
+[
+  {
+    "order": 1,
+    "slug": "Text-To-SQL",
+    "name": "Text-to-SQL Agent",
+    "featured": true,
+    "projectLink": "https://hmda-ny-text-to-sql.streamlit.app/",
+    "thumb": "/images/projects/mortgage.png",
+    "year": "May 2026",
+    "description": "A natural-language interface for querying NY State mortgage records. Given a plain English prompt, the agent returns a SQL query, a chart, and the answer.",
+    "technologies": ["Altair", "Claude API", "DuckDB", "Pandas", "Python", "SQL", "Streamlit"],
+    "roles": [],
+    "body": [
+      { "type": "paragraph", "text": "Public mortgage data is rich but at times hard to use. This app is an agentic avenue for quickly querying data and performing cursory analyses." },
+      { "type": "paragraph", "text": "Using 2025 HMDA data, I built a Streamlit app over a DuckDB database of 430,000 New York State mortgage applications. The agent converts plain-English questions into executable SQL via a Claude API. The app executes the query against the local database, and renders the result as both a chart and a table." },
+      { "type": "paragraph", "text": "Rather than parsing free-form text from the model, the agent returns a structured response through a defined schema: a SQL query, an optional explanation, and an optional chart spec. This keeps the integration predictable and makes it easy to extend. Adding the chart spec was a single field added to the schema from my end instead of a whole new layer of parsing logic." },
+      { "type": "paragraph", "text": "A self-correcting retry loop feeds execution errors back to the model on failure, and an automated evaluation harness scores correctness across 15 benchmark questions covering aggregations, joins, demographics, and out-of-scope inputs. The results highlight something the system makes explicit: the generated SQL is always visible to the user, so the agent can be trusted not because it's perfect but because its reasoning is verifiable." }
+    ]
+  },
+  {
+    "order": 2,
+    "slug": "CC-Churn",
+    "name": "Predicting Credit Card Churn",
+    "featured": true,
+    "projectLink": "https://www.kaggle.com/code/kayzhang34/predicting-credit-card-churn-random-forest",
+    "thumb": "/images/projects/cc.png",
+    "year": "July 2025",
+    "description": "Binary classification model predicting credit card customer churn on a Kaggle competition dataset. Started with a baseline decision tree, then improved with XGBoost and GridSearchCV hyperparameter tuning.",
+    "technologies": ["Matplotlib", "NumPy", "Pandas", "Python", "Scikit-learn", "Seaborn", "XGBoost"],
+    "roles": [],
+    "body": [
+      { "type": "paragraph", "text": "The dataset had 7,088 training records with a 16% churn rate — a moderately imbalanced classification problem. EDA showed that transaction volume and revolving balance were the strongest predictors of churn, while categorical features like education level and card category had little signal." },
+      { "type": "paragraph", "text": "The baseline decision tree achieved an F1 of 0.813. Switching to XGBoost with 5-fold cross-validation and grid search over depth, learning rate, and estimator count pushed that to 0.893 F1 and 0.967 accuracy — a solid improvement, though the competition leaderboard kept me humble." }
+    ]
+  },
+  {
+    "order": 3,
+    "slug": "NBA-Draft",
+    "name": "Expected Value of an NBA Draft Pick",
+    "featured": true,
+    "projectLink": "https://github.com/KayZhang34/NBA-Draft-Exploration2/blob/main/The%20Expected%20Value%20of%20an%20NBA%20Draft%20Pickv2.ipynb",
+    "thumb": "/images/projects/nbadraft.jpg",
+    "year": "May 2025",
+    "description": "Explored the relationship between NBA draft position and player performance across 22 draft classes (1989–2011) and 1,322 draftees.",
+    "technologies": ["Matplotlib", "NumPy", "Pandas", "Python", "Scipy", "Seaborn", "statsmodels"],
+    "roles": [],
+    "body": [
+      { "type": "paragraph", "text": "Using data from Stathead.com, I built a dataset of 1,322 draftees across 22 NBA draft classes (1989–2011), measuring each player's value through \"Prime Win Shares\" — the sum of their five best seasons by Win Shares, a metric adapted from Brocato Prime Wins. Players who never appeared in the NBA are included with zero production, since a pick that goes nowhere is still a pick spent." },
+      { "type": "paragraph", "text": "The analysis progressively refines the model: starting with a simple OLS regression, testing its assumptions, applying a log transformation to address skewness and non-linearity, grouping picks into draft tiers (Top Pick / Lottery / First Round / Second Round), and using bootstrap aggregation (bagging) to stabilize coefficient estimates." },
+      { "type": "paragraph", "text": "The final models achieve an R² of ~0.326–0.328 — meaningful, but deliberately modest. The results highlight something the numbers make clear: draft position sets an expectation, not a guarantee. The variance in outcomes is the story." }
+    ]
+  },
+  {
+    "order": 4,
+    "slug": "Crypto-Bot",
+    "name": "Arbitrage Trading Bot for Binance.US",
+    "featured": false,
+    "projectLink": null,
+    "thumb": "/images/projects/crypto.jpg",
+    "year": "March 2025",
+    "description": "Analyzed real-time financial market data from Binance.US, identifying arbitrage opportunities and automatically executing trades via Binance's REST API.",
+    "technologies": ["Binance API", "NumPy", "Pandas", "Python"],
+    "roles": [],
+    "body": [
+      { "type": "paragraph", "text": "The idea behind triangular arbitrage is pretty simple: if the price relationships between three assets are temporarily out of sync, you can cycle through them and end up with more than you started with." },
+      { "type": "paragraph", "text": "The bot watched 6 trading pairs simultaneously: SOLETH, ETHBTC, SOLBTC, and their respective USDC pairs. It calculated 6 arbitrage ratios in real time, and when any ratio clears 1.01 after accounting for fees, it fires off a sequence of 3 limit orders to capture the spread." },
+      { "type": "paragraph", "text": "Each run pulls the current order book depth, computes the ratios, checks all 6 conditions, and logs information to a CSV: timestamps, ratios, order IDs, quantities, prices, and whether a trade even fired." },
+      { "type": "paragraph", "text": "While the bot worked mechanically, the arbitrage opportunities in crypto are razor thin and Binance.US's order book had low volume. The lower volume did help me execute trades without being as concerned about latency, but the bot would execute less often, and trades were smaller overall." },
+      { "type": "paragraph", "text": "For the time I ran the bot, it ran +230,000 checks and only executed 16 full arbitrage cycles, never exceeding $20 on a spread of around 1%. It was a solid exercise in API integration, order book mechanics, and thinking carefully about execution risk, but it was honestly not very profitable." }
+    ]
+  },
+  {
+    "order": 5,
+    "slug": "BSR-Montage",
+    "name": "Broad Street Run Training Montage",
+    "featured": false,
+    "projectLink": "https://youtu.be/lx2jaRZ6AqU?si=FZH24I1IUSP4lfaW",
+    "thumb": "/images/projects/thumbnail.jpg",
+    "year": "Nov 2020",
+    "description": "A training montage from going to not running at all to running 10 miles at 8:48 min/mile pace!",
+    "technologies": ["Adobe Premiere Pro"],
+    "roles": [],
+    "body": [
+      { "type": "paragraph", "text": "This was my first race ever! Even though it ended up being virtual b/c of the pandemic, it was still pretty fun to accomplish new goals in new domains. I didn't know what a good baseline target was, so I looked up the average Broad Street Run finish time for my gender/age group from the year before and it was 8:52/mile. That became the target." },
+      { "type": "paragraph", "text": "I found a free 12-week half-marathon training program online and just followed it from zero basically. I just show up consistently, listened to my body, and vlogged about it online while being socially distanced from a lot of homies. I tracked every run pace, distance, and how I felt." },
+      { "type": "paragraph", "text": "12 weeks later: 10 miles at 8:48/mile! Just a bit under my target, but it still felt like an accomplishment! It also started my running career which has honestly been inconsistent and highly weather dependent lol." }
+    ]
+  }
+]

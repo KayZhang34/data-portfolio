@@ -1,11 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getAllItems } from "@/lib/notion-queries";
+import { getAllItems } from "@/lib/data-queries";
 
-export const revalidate = 60;
-
-export default async function ProjectsPage() {
-  const items = await getAllItems();
+export default function ProjectsPage() {
+  const items = getAllItems();
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">

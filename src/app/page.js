@@ -1,12 +1,10 @@
 import ProjectCard from "./components/project-card";
-import { getFeaturedItems } from "@/lib/notion-queries";
+import { getFeaturedItems } from "@/lib/data-queries";
 import ImageCarousel from "./components/image-carousel";
 import CopyEmailButton from "./components/copy-email-button";
 
-export const dynamic = "force-dynamic";
-
-export default async function Home() {
-  const items = await getFeaturedItems();
+export default function Home() {
+  const items = getFeaturedItems();
   const carouselImages = [
     { src: "/kay3.jpg", caption: "🍡 Queens, New York" },
     { src: "/kay5.jpg", caption: "🍵 Osaka, Japan" },

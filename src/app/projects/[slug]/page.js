@@ -1,58 +1,15 @@
 // app/projects/[slug]/page.js
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getItemBySlug, getBlocks } from "@/lib/notion-queries";
+import { getItemBySlug } from "@/lib/data-queries";
 import Navbar from "@/app/components/navbar";
 
-export const revalidate = 300;
+export default function ProjectPage({ params }) {
+  const project = getItemBySlug(params.slug);
+  if (!project) return notFound();
 
-/** Renders a Notion rich_text array with inline formatting preserved. */
-function RichText({ richText = [] }) {
-  return (
-    <>
-      {richText.map((t, i) => {
-        const { bold, italic, underline, strikethrough, code } = t.annotations ?? {};
-        let node = t.plain_text;
-
-        if (code)          node = <code key={i} className="px-1 py-0.5 bg-gray-100 rounded text-sm font-mono">{node}</code>;
-        if (bold)          node = <strong key={i} className="font-semibold">{node}</strong>;
-        if (italic)        node = <em key={i}>{node}</em>;
-        if (underline)     node = <u key={i}>{node}</u>;
-        if (strikethrough) node = <s key={i}>{node}</s>;
-
-        if (t.href) {
-          return (
-            <a key={i} href={t.href} target="_blank" rel="noreferrer"
-               className="underline underline-offset-2 hover:text-gray-600 transition-colors">
-              {node}
-            </a>
-          );
-        }
-
-        return <span key={i}>{node}</span>;
-      })}
-    </>
-  );
-}
-
-export default async function ProjectPage({ params }) {
-  const page = await getItemBySlug(params.slug);
-  if (!page) return notFound();
-  const p = page.properties;
-  const name = p.title?.title?.[0]?.plain_text ?? "Untitled";
-  const projectLink = p.projectLink?.url ?? null;
-  const descRt = p.description?.rich_text ?? [];
-
-  const year = p.year?.rich_text?.[0]?.plain_text ?? "";
-  const tech = (p.technologies?.multi_select ?? []).map((t) => t.name);
-  const roles = (p.roles?.multi_select ?? []).map((r) => r.name);
-
-  const images = (p.image?.files ?? [])
-    .map((f) => (f.type === "file" ? f.file.url : f.external?.url))
-    .filter(Boolean);
-
-  const blocks = await getBlocks(page.id);
+  const { name, projectLink, description, year, technologies, roles, thumb, body = [] } = project;
+  const images = project.images ?? [];
 
   return (
     <div className="min-h-screen bg-[#f5f5f5]">
@@ -61,19 +18,36 @@ export default async function ProjectPage({ params }) {
       {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-8 pt-28 sm:pt-32 pb-20">
         {/* Hero Section with Sidebar */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-16">
           {/* Left Column - Project Info */}
-          <div className="lg:col-span-1">
+          <div>
             <h1 className="text-5xl font-normal text-gray-900 mb-8">{name}</h1>
 
+            {thumb && (
+              <a
+                href={projectLink ?? undefined}
+                target="_blank"
+                rel="noreferrer"
+                className={`relative w-full aspect-video rounded-2xl overflow-hidden bg-gray-100 shadow-sm border border-gray-200 mb-6 group block ${projectLink ? "cursor-pointer" : "cursor-default"}`}
+              >
+                <Image
+                  src={thumb}
+                  alt={name}
+                  fill
+                  className="object-contain group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </a>
+            )}
+
             {roles.length > 0 && (
-              <div className="mb-8">
+              <div className="mb-6">
                 <h3 className="text-xs uppercase tracking-wider text-gray-400 mb-3">
                   MY ROLE
                 </h3>
                 <div className="space-y-1 text-sm">
-                  {roles.map((t) => (
-                    <p key={t} className="text-gray-900">{t}</p>
+                  {roles.map((r) => (
+                    <p key={r} className="text-gray-900">{r}</p>
                   ))}
                 </div>
               </div>
@@ -95,23 +69,23 @@ export default async function ProjectPage({ params }) {
           </div>
 
           {/* Right Column - Description, Tools, Timeline */}
-          <div className="lg:col-span-2">
-            {descRt.length > 0 && (
+          <div>
+            {description && (
               <div className="mb-8">
                 <h3 className="text-xs uppercase tracking-wider text-gray-400 mb-3">
                   DESCRIPTION
                 </h3>
-                <p className="text-gray-900 leading-relaxed"><RichText richText={descRt} /></p>
+                <p className="text-gray-900 leading-relaxed">{description}</p>
               </div>
             )}
 
-            {tech.length > 0 && (
+            {technologies.length > 0 && (
               <div className="mb-8">
                 <h3 className="text-xs uppercase tracking-wider text-gray-400 mb-3">
                   TOOLS
                 </h3>
                 <div className="flex flex-wrap gap-2 min-w-0 w-full">
-                  {tech.map((t) => (
+                  {technologies.map((t) => (
                     <span key={t} className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full border border-gray-200 break-words">
                       {t}
                     </span>
@@ -131,10 +105,10 @@ export default async function ProjectPage({ params }) {
           </div>
         </div>
 
-        {/* Body Content from Notion */}
-        {blocks.length > 0 && (
+        {/* Body Content */}
+        {body.length > 0 && (
           <div className="max-w-3xl mb-16 space-y-4">
-            <NotionBlocks blocks={blocks} />
+            <JsonBlocks body={body} />
           </div>
         )}
 
@@ -167,53 +141,24 @@ export default async function ProjectPage({ params }) {
   );
 }
 
-function NotionBlocks({ blocks }) {
+function JsonBlocks({ body }) {
   return (
     <>
-      {blocks.map((b) => {
-        if (b.type === "paragraph") {
-          const rt = b.paragraph?.rich_text ?? [];
-          if (!rt.length) return <div key={b.id} className="h-2" />;
-          return (
-            <p key={b.id} className="text-gray-900 leading-relaxed">
-              <RichText richText={rt} />
-            </p>
-          );
+      {body.map((block, i) => {
+        if (block.type === "heading_2") {
+          return <h2 key={i} className="text-xl font-medium text-gray-900 mt-6 mb-2">{block.text}</h2>;
         }
-
-        if (b.type === "heading_2") {
-          return (
-            <h2 key={b.id} className="text-xl font-medium text-gray-900 mt-6 mb-2">
-              <RichText richText={b.heading_2?.rich_text ?? []} />
-            </h2>
-          );
+        if (block.type === "heading_3") {
+          return <h3 key={i} className="text-lg font-medium text-gray-900 mt-4 mb-1">{block.text}</h3>;
         }
-
-        if (b.type === "heading_3") {
-          return (
-            <h3 key={b.id} className="text-lg font-medium text-gray-900 mt-4 mb-1">
-              <RichText richText={b.heading_3?.rich_text ?? []} />
-            </h3>
-          );
+        if (block.type === "bulleted_list_item") {
+          return <li key={i} className="text-gray-900 ml-6 mb-1 list-disc">{block.text}</li>;
         }
-
-        if (b.type === "bulleted_list_item") {
-          return (
-            <li key={b.id} className="text-gray-900 ml-6 mb-1 list-disc">
-              <RichText richText={b.bulleted_list_item?.rich_text ?? []} />
-            </li>
-          );
+        if (block.type === "numbered_list_item") {
+          return <li key={i} className="text-gray-900 ml-6 mb-1 list-decimal">{block.text}</li>;
         }
-
-        if (b.type === "numbered_list_item") {
-          return (
-            <li key={b.id} className="text-gray-900 ml-6 mb-1 list-decimal">
-              <RichText richText={b.numbered_list_item?.rich_text ?? []} />
-            </li>
-          );
-        }
-
-        return <div key={b.id} />;
+        // default: paragraph
+        return <p key={i} className="text-gray-700 leading-relaxed">{block.text}</p>;
       })}
     </>
   );
