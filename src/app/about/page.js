@@ -6,13 +6,15 @@ export default function AboutPage() {
       company: "Curinos",
       dates: "Jan 2022 - Oct 2024",
       role: "Senior Data Analyst",
-      description: "Built and maintained SQL pipelines processing 200M+ time-series records for banking clients. Owned Tableau dashboards their teams used day-to-day to track KPIs. Ran cohort and regression analyses to model how pricing affected customer behavior. Automated a bunch of recurring validation workflows. Ultimately, I helped clients make the most out of their data",
+      description:
+        "Built and maintained SQL pipelines processing 200M+ time-series records for banking clients. Owned Tableau dashboards their teams used day-to-day to track KPIs. Ran cohort and regression analyses to model how pricing affected customer behavior. Automated a bunch of recurring validation workflows. Ultimately, I helped clients make the most out of their data",
     },
     {
       company: "Accenture",
       dates: "July 2019 - Dec 2021",
       role: "Technology Consulting Senior Analyst",
-      description: "Consulting mostly in healthcare as a Salesforce CRM specialist. I did a lot of data integration work, consolidating 2M+ customer and campaign records from multiple platforms into a single Salesforce CRM instance using Snowflake SQL. Those experiences grew my interest in more data work and brought me to my next role at Curinos.",
+      description:
+        "Consulting mostly in healthcare as a Salesforce CRM specialist. I did a lot of data integration work, consolidating 2M+ customer and campaign records from multiple platforms into a single Salesforce CRM instance using Snowflake SQL. Those experiences grew my interest in more data work and brought me to my next role at Curinos.",
     },
   ];
 
@@ -32,19 +34,23 @@ export default function AboutPage() {
               </h1>
               <div className="space-y-6 text-gray-700 leading-relaxed">
                 <p>
-                  I graduated from NYU with a B.A. in Math. It was highkey challenging,
-                  but that experience built strong foundations in problem-solving and taught me how to persist through difficult situations.
-                  Those skills have been useful in my career and also more generally in life.
+                  I graduated from NYU with a B.A. in Math. It was highkey
+                  challenging, but that experience built strong foundations in
+                  problem-solving and taught me how to persist through difficult
+                  situations. Those skills have been useful in my career and
+                  also more generally in life.
                 </p>
                 <p>
-                  I've been blessed with the opportunity to work at Curinos and Accenture,
-                  and I learned a lot about work and myself in that time.
-                  I took a planned career break in late 2024 due to career alignment,
-                  and I've been grateful for this time to reflect on my career and explore what I want to do next. 
+                  I've been blessed with the opportunity to work at Curinos and
+                  Accenture, and I learned a lot about work and myself in that
+                  time. I took a planned career break in late 2024 due to career
+                  alignment, and I've been grateful for this time to reflect on
+                  my career and explore what I want to do next.
                 </p>
                 <p>
-                  I'm currently looking for new opportunities in data analytics, business intelligence, and related fields.
-                  If you have any opportunities or just want to chat, feel free to hit me up at {" "}
+                  I'm currently looking for new opportunities in data analytics,
+                  business intelligence, and related fields. If you have any
+                  opportunities or just want to chat, feel free to hit me up at{" "}
                   <a
                     href="mailto:kay.zhang34@gmail.com"
                     className="text-blue-500 hover:underline"
@@ -58,7 +64,7 @@ export default function AboutPage() {
             {/* Right Column - Image */}
             <div className="rounded-3xl overflow-hidden h-[300px] md:h-[500px] relative">
               <Image
-                src="/images/kay2.jpg"
+                src="/images/kay.jpg"
                 alt="Kay Zhang"
                 fill
                 className="object-cover"
@@ -82,13 +88,17 @@ export default function AboutPage() {
               >
                 <div>
                   <div className="mb-2">
-                    <span className="text-gray-900 font-normal">{job.company}</span>
+                    <span className="text-gray-900 font-normal">
+                      {job.company}
+                    </span>
                     <span className="text-gray-500"> | {job.dates}</span>
                   </div>
                   <h3 className="text-gray-900 font-medium">{job.role}</h3>
                 </div>
                 <div>
-                  <p className="text-gray-700 leading-relaxed">{job.description}</p>
+                  <p className="text-gray-700 leading-relaxed">
+                    {job.description}
+                  </p>
                 </div>
               </div>
             ))}
